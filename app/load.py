@@ -15,3 +15,17 @@ def get_last_loaded_timestamp():
     conn.close()
 
     return result[0]
+
+
+def update_last_loaded_timestamp(new_timestamp):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE pipeline_metadata
+        SET last_loaded_at = %s
+        WHERE pipeline_name = 'orders_pipeline';
+    """, (new_timestamp,))
+
+    conn.commit()
+    conn.close()
